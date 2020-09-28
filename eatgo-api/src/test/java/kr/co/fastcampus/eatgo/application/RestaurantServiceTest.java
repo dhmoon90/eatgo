@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -70,7 +71,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getRestaurants() {
+    public void getRestaurantsWithExisted() {
         List<Restaurant> restaurants = restaurantService.getRestaurants();
 
         Restaurant restaurant = restaurantService.getRestaurant(1004L);
@@ -80,6 +81,13 @@ public class RestaurantServiceTest {
         MenuItem menuItem = restaurant.getMenuItems().get(0);
 
         assertEquals(menuItem.getName(),"Kimchi");
+    }
+
+    @Test
+    public void getRestaurantsWithNotExisted() {
+        assertThatThrownBy(() -> {
+           restaurantService.getRestaurant(404L);
+        }).isInstanceOf(RestaurantNotFoundException.class);
     }
 
     @Test
